@@ -1293,7 +1293,7 @@ app.post('/api/proctor/end', async (req, res) => {
 });
 
 // Get proctor session details — public for dashboard view (no login)
-app.get('/api/proctor/session/:id', async (req, res) => {
+app.get('/api/proctor/session/:id', auth.requireAuth, auth.requireAdmin, async (req, res) => {
   try {
     const session = await ProctorSession.findById(req.params.id);
     if (!session) return res.status(404).json({ error: 'session not found' });
@@ -1308,7 +1308,7 @@ app.get('/api/proctor/session/:id', async (req, res) => {
 // The dashboard at /proctor is meant to be accessible to anyone monitoring the exam
 app.get('/api/proctor/ping', (req, res) => { res.json({ ok: true }) });
 
-app.get('/api/proctor/sessions', async (req, res) => {
+app.get('/api/proctor/sessions', auth.requireAuth, auth.requireAdmin, async (req, res) => {
   try {
     const limit = Math.min(parseInt(req.query.limit, 10) || 100, 200)
     const sessions = await ProctorSession.find({})
