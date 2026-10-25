@@ -1422,7 +1422,7 @@ app.get('/api/emotions/stats/:quizType', async (req, res) => {
 });
 
 // Get emotion history for a user — public (filter by userId if provided)
-app.get('/api/emotions/history', async (req, res) => {
+app.get('/api/emotions/history', auth.requireAuth, auth.requireAdmin, async (req, res) => {
   try {
     const { userId, limit = 50 } = req.query;
     const query = userId ? { userId } : {};
